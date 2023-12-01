@@ -5,6 +5,12 @@ body {
     padding: 0;
   }
   
+  .flex{
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-items: start;
+  }
   .containerpin {
     max-width: 80%;
     margin: 0 auto;

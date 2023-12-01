@@ -156,3 +156,10 @@ hr {
 .login a{
   color: black;
 }
+
+.error {
+  margin: 7px 0;
+  text-transform: capitalize;
+  color: red;
+  font-weight: 500;
+}

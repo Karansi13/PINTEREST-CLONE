@@ -14,21 +14,31 @@
           <div class="profile-picture">
             <img src="https://images.unsplash.com/photo-1701244450186-cf76378d4c65?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Profile Picture">
           </div>
-          <h2 class="name">username</h2>
-          <h3 class="username">@username</h3>
-          <p class="tagline">some tagline</p>
-          <p class="description">some description</p>
-          <a href="#" class="button">Account Settings</a>
+          <h2 class="name"><%= user.fullName %></h2>
+          <h3 class="username">@<%= user.username %></h3>
+          <p class="tagline">Lorem ipsum dolor sit amet.</p>
+          <p class="description">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquam?</p>
+          <a href="/logout" class="button">Logout</a>
+          <form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="text" name="filecaption" placeholder="some caption">
+            <input type="file" name="file">
+            <input type="submit">
+          </form>
         </div>
     </div>
     <div class="container">
-    <div class="card" style="width: 18rem;">
-        <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">All images</h5>
-          <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
-        </div>
+      <div class="cards flex">
+        <% user.posts.forEach(function(post){ %>
+          <div class="card" style="width: 18rem;">
+            <img src="/images/uploads/<%= post.image %>" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title"><%= post.imageText %></h5>
+              <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+            </div>
+          </div>
+          <% }) %>
       </div>
+    
     </div>
 </body>
 

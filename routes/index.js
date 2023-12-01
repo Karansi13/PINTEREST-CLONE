@@ -3,6 +3,7 @@ var router = express.Router();
 const userModel = require("./users");
 const postModel = require("./posts");
 const passport = require("passport");
+const upload = require("./multer")
 
 // in dono line se user login hota hai
 const localStrategy = require("passport-local");
@@ -14,15 +15,41 @@ router.get("/", function (req, res, next) {
 });
 
 router.get("/login", function (req, res, next) {
-  res.render("login", { title: "login" });
+  // console.log(req.flash())
+  // req.flash() ek array return krta hai
+  res.render("login", { error: req.flash('error')});
 });
 
 router.get("/feed", function (req, res, next) {
   res.render("feed");
 });
 
-router.get('/profile', isLogedIn, function(req, res, next) {
-  res.render("profile")
+router.post("/upload",isLogedIn, upload.single("file"),async function (req, res, next) {
+  if(!req.file) {
+    return res.status(404).send("no files were given");
+  }
+  // jo file upload hui hai use save kro as apost and uska postid user ko do and post ko userid do
+
+  const user = await userModel.findOne({username: req.session.passport.user})
+  const post = await postModel.create({
+    image: req.file.filename,
+    imageText: req.body.filecaption,
+    user: user._id
+  });
+  
+  user.posts.push(post._id)
+  await user.save()
+  res.redirect("/profile")
+  // res.send("done")
+});
+
+router.get('/profile', isLogedIn, async function(req, res, next) {
+  const user = await userModel.findOne({
+    username: req.session.passport.user
+  })
+  .populate("posts")
+  // console.log(user)
+  res.render("profile", { user })
 })
 
 router.post("/register", function (req, res) {
@@ -43,7 +70,8 @@ router.post("/register", function (req, res) {
 
 router.post("/login", passport.authenticate("local",{
   successRedirect: "/profile",
-  failureRedirect: "/login"
+  failureRedirect: "/login",
+  failureFlash: true
 }), function(req, res) {
 });
 
